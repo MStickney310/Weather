@@ -1,0 +1,5 @@
+# Set up a Virtual Environment
+#Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+#venv\Scripts\Activate.ps1
+
+requests
