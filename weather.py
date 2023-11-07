@@ -16,6 +16,15 @@ class Weather(object):
     def temp(self, station):
         latest = self._latest_observations(station)
 
+    def precipitation(self, station):
+        latest = self._latest_observations(station)
+
+    def windSpeed(self, station):
+        latest = self._latest_observations(station)
+
+    def windChill(self, station):
+        latest = self._latest_observations(station)
+
     def _latest_observations(self, station=None):
         if not station:
             raise RuntimeError('No station specified for call')
