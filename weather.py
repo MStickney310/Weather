@@ -14,25 +14,54 @@ class Weather(object):
         }
 
 
-    def temp(self, location):
+    def current_temp(self, location):
         latest = self._latest_observations(location)
         t = latest['temperature']['value']
-        t = math.floor(t)
-        f = float((9/5 * t) + 32)
-        f = math.floor(f)
-        print(f"celsius temperature: {t}°, fahrenheit temperature: {f}°")
+        try:
+            t = math.floor(t)
+            f = float((9/5 * t) + 32)
+            f = math.floor(f)
+        except TypeError:
+            t = None
+            f = None
+
+        #print(f"celsius temperature: {t}°, fahrenheit temperature: {f}°")
+        ret = {
+            'fahrenheit': f,
+            'celsius': t
+        }
+        return ret
 
 
-    def windSpeed(self, location):
+    def current_wind(self, location):
         latest = self._latest_observations(location)
-        ws = latest['windSpeed']['value']
-        print(f"Wind Speed: {ws}")
+        try:
+            dir = latest['windDirection']['value']
+        except TypeError:
+            dir = None
+        #direction_cardinal = # do some magic
+        try:
+            speed = latest['windSpeed']['value']
+            speed_mph = speed * 0.621371
+        except TypeError:
+            speed = None
+            speed_mph = None
+        try:
+            gust = latest['windGust']['value']
+            gust_mph = gust * 0.621371
+        except TypeError:
+            gust = None
+            gust_mph = None
 
-
-    def windChill(self, location):
-        latest = self._latest_observations(location)
-        wc = latest['windChill']['value']
-        print(f"Wind Chill: {wc}")
+        ret = {
+            'direction_degrees': dir,
+            # 'direction_cardinal'
+            'speed_kmh': speed,
+            'speed_mph': speed_mph,
+            'gust_kmh': gust,
+            'gust_mph': gust_mph
+        }
+        return ret
 
 
     def _get_station(self, location=None):
@@ -64,7 +93,7 @@ class Weather(object):
 
 
         url = f"{self.api_url}/stations/{station}/observations/latest"
-        print(url)
+        #print(url)
         res = requests.get(url, headers=self.headers)
         if res.status_code != 200:
             raise RuntimeError(f"Unable to get latest observations: {res.reason} ({res.status_code})")
@@ -79,6 +108,9 @@ if __name__ == '__main__':
     api_url = 'https://api.weather.gov'
     location = '40.7703236,-79.9416973'
     wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
-    wx.temp(location)
+    temp = wx.current_temp(location)
+    print(temp)
 
+    wind = wx.current_wind(location)
+    print(wind)
 
