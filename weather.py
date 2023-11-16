@@ -32,6 +32,17 @@ class Weather(object):
         }
         return ret
 
+    def current_windChill(self, location):
+        latest = self._latest_observations(location)
+        try:
+            wc = latest['windChill']['value']
+        except TypeError:
+            wc = None
+
+        ret = {
+            'windchill_degC': wc
+        }
+        return ret
 
     def current_wind(self, location):
         latest = self._latest_observations(location)
@@ -60,6 +71,18 @@ class Weather(object):
             'speed_mph': speed_mph,
             'gust_kmh': gust,
             'gust_mph': gust_mph
+        }
+        return ret
+
+    def current_visibility(self, location):
+        latest = self._latest_observations(location)
+        try:
+            vis = latest['visibility']['value']
+        except TypeError:
+            vis = None
+
+        ret = {
+            'visibility_m': vis
         }
         return ret
 
@@ -111,6 +134,11 @@ if __name__ == '__main__':
     temp = wx.current_temp(location)
     print(temp)
 
+    windChill = wx.current_windChill(location)
+    print(windChill)
+
     wind = wx.current_wind(location)
     print(wind)
 
+    visibility = wx.current_visibility(location)
+    print(visibility)
