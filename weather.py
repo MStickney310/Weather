@@ -126,6 +126,7 @@ class Weather(object):
         return data['properties']
 
 
+
 if __name__ == '__main__':
     api_url = 'https://api.weather.gov'
     location = '40.7703236,-79.9416973'
