@@ -3,7 +3,7 @@
 import json
 import requests
 import math
- 
+
 class Weather(object):
     def __init__(self, api_url, user_agent):
         self.api_url = api_url

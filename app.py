@@ -4,7 +4,7 @@ from weather import Weather
 app = Flask('weather')
 api_url = 'https://api.weather.gov'
 location = '40.7703236,-79.9416973'
- 
+
 @app.route('/')
 def index():
     wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
