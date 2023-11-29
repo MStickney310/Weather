@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %}Main{% endblock %}</h1>
+
+{% block content %}
+<p>Your current temperature is {{ temp['fahrenheit']}}F
+</br>Wind is blowing at {{ wind['speed_mph']}}mph causing a wind chill of {{ windChill['windchill_degC']}}C
+</br>Visibility is {{ visibility['visibility_m']}}m
+</p>
+{% endblock %}
