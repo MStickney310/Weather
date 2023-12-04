@@ -1,7 +1,10 @@
+from flask_bootstrap import Bootstrap5
 from flask import Flask, render_template
 from weather import Weather
 
 app = Flask('weather')
+bootstrap = Bootstrap5(app)
+
 api_url = 'https://api.weather.gov'
 location = '40.7703236,-79.9416973'
  
