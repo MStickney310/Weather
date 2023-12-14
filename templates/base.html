@@ -12,6 +12,9 @@
 </head>
 <body>
     {% block content %}{% endblock %}
+    <a href="{{ url_for('index') }}">Main</a>
+</br>
+    <a href="{{ url_for('history') }}">History</a>
     {% block scripts %}
         <!-- Optional Javascript -->
         {{ bootstrap.load_js() }}

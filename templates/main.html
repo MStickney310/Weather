@@ -3,8 +3,32 @@
 <h1>{% block title %}Main{% endblock %}</h1>
 
 {% block content %}
-<p>Your current temperature is {{ temp['fahrenheit']}}F
+
+<p>
+</br>
+<h1 fontsize="8" text-align = "text-center">
+    Current Local Weather:
+</h1>
+</br>
+<div class="container text-center">
+    <div class="row">
+      <div class="col">
+        Your current temperature is {{ temp['fahrenheit']}}F
+      </div>
+      <div class="col-7">
+        Wind is blowing at {{ wind['speed_mph']}}mph causing a wind chill of {{ windChill['windchill_degC']}}C
+      </div>
+      <div class="col">
+        Visibility is {{ visibility['visibility_m']}}m
+      </div>
+    </div>
+  </div>
+</p>
+
+<!--
+  <p>Your current temperature is {{ temp['fahrenheit']}}F
 </br>Wind is blowing at {{ wind['speed_mph']}}mph causing a wind chill of {{ windChill['windchill_degC']}}C
 </br>Visibility is {{ visibility['visibility_m']}}m
 </p>
-{% endblock %}
+-->
+{% endblock %} 

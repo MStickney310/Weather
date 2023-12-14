@@ -120,8 +120,8 @@ class Weather(object):
         res = requests.get(url, headers=self.headers)
         if res.status_code != 200:
             raise RuntimeError(f"Unable to get latest observations: {res.reason} ({res.status_code})")
-        #print(res.status_code)
-        #print(res.text)
+        print(res.status_code)
+        print(res.text)
         data = res.json()
         return data['properties']
 

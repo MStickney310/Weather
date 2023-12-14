@@ -26,3 +26,12 @@ def index():
     #ret += '</p>'
 
     return render_template('main.html',temp=temp,wind=wind,windChill=windChill,visibility=visibility)
+
+
+@app.route('/history')
+def history():
+    wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
+
+    # do stuff
+
+    return render_template('history.html')
