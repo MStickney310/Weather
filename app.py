@@ -1,5 +1,8 @@
+import base64
+from io import BytesIO
 from flask_bootstrap import Bootstrap5
 from flask import Flask, render_template
+from matplotlib.figure import Figure
 from weather import Weather
 
 app = Flask('weather')
@@ -31,7 +34,17 @@ def index():
 @app.route('/history')
 def history():
     wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
+    temps = wx.past_temps(location)
 
-    # do stuff
-
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot([t['fahrenheit'] for t in temps])
+    #save it to a temprorary buffer
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    #embed the result in the HTML output
+    temp_graph = base64.b64encode(buf.getbuffer()).decode("ascii")
+    #return f"<img src='data:image/png;base64,{data}'/>"
     return render_template('history.html')
+
+    return render_template('history.html',temp_graph_img=temp_graph)
