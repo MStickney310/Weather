@@ -3,7 +3,7 @@
 import json
 import requests
 import math
- 
+
 class Weather(object):
     def __init__(self, api_url, user_agent):
         self.api_url = api_url
@@ -31,6 +31,24 @@ class Weather(object):
             'celsius': t
         }
         return ret
+
+    def past_temps(self, location):
+        history = self._history_observations(location)
+        t = history['temperature']['value']
+        try:
+            t = math.floor(t)
+            f = float((9/5 * t) + 32)
+            f = math.floor(f)
+        except TypeError:
+            t = None
+            f = None
+
+        #print(f"celsius temperature: {t}°, fahrenheit temperature: {f}°")
+        retur = {
+            'fahrenheit': f,
+            'celsius': t
+        }
+
 
     def current_windChill(self, location):
         latest = self._latest_observations(location)
@@ -114,7 +132,6 @@ class Weather(object):
             raise RuntimeError('No location specified for call')
         station = self._get_station(location)
 
-
         url = f"{self.api_url}/stations/{station}/observations/latest"
         print(url)
         res = requests.get(url, headers=self.headers)
@@ -124,6 +141,23 @@ class Weather(object):
         #print(res.text)
         data = res.json()
         return data['properties']
+    
+    
+    def _history_observations(self, location=None):
+        if not location:
+            raise RuntimeError('No location specified for call')
+        station = self._get_station(location)
+
+        url = f"{self.api_url}/stations/{station}/observations"
+        print(url)
+        res = requests.get(url, headers=self.headers)
+        if res.status_code != 200:
+            raise RuntimeError(f"Unable to get past observations: {res.reason} ({res.status_code})")
+        #print(res.status_code)
+        #print(res.text)
+        data = res.json()
+        print(res.json)
+        return data['features']['properties']
 
 
 
