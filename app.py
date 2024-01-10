@@ -1,7 +1,7 @@
 import base64
 from io import BytesIO
 from flask_bootstrap import Bootstrap5
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for
 from matplotlib.figure import Figure
 from weather import Weather
 
@@ -9,30 +9,41 @@ app = Flask('weather')
 bootstrap = Bootstrap5(app)
 
 api_url = 'https://api.weather.gov'
-location = '40.7703236,-79.9416973'
+default_location = '40.7703236,-79.9416973'
  
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    location = default_location
     wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
-    ret = '<p>Welcome to Our Weather App</p>'
+    if request.method == 'POST':
+        location = request.form.get('location')
+        #perform input validation
+        location = location.split(',')
+        if len(location) != 2:
+            ret = '<h2>Location data must be in the form of "lat,lon"</h2>'
+            ret += f"<a href=\"{url_for('index')}\">Go Back</a>"
+            return ret
+        try:    
+            location = [float(l) for l in location]
+        except TypeError:
+            ret = '<h2>Location data must be in the form of "lat,lon" as decimals</h2>'
+            ret += f"<a href=\"{url_for('index')}\">Go Back</a>"
+            return ret
+        location = [str(l) for l in location]
+        location = ','.join(location)
+        print(location)
+
     temp = wx.current_temp(location)
     wind = wx.current_wind(location)
     windChill = wx.current_windChill(location)
     visibility = wx.current_visibility(location)
-
-    #ret += '\n'
-    #ret += f"<p>Your current temperature is {temp['fahrenheit']}F"
-    #ret += '\n'
-    #ret += f"</br>Wind is blowing at {wind['speed_mph']}mph causing a wind chill of {windChill['windchill_degC']}C"
-    #ret += '\n'
-    #ret += f"</br>Visibility is {visibility['visibility_m']}m"
-    #ret += '</p>'
 
     return render_template('main.html',temp=temp,wind=wind,windChill=windChill,visibility=visibility)
 
 
 @app.route('/history')
 def history():
+    location = default_location
     wx = Weather(api_url, 'C50501-SJHS Weather Application V1.0')
     temps = wx.past_temps(location)
 
